@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student CRUD</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <h1>Order CRUD</h1>
+    <div id="orderDisplay"></div>
+
+    <h2>Add Order</h2>
+    <input type="text" id="orderDesc" placeholder="Description">
+    <input type="number" id="price" placeholder="Price">
+    <button onclick="addOrder()">Add Order</button>
+
+    <script>
+        const SERVER = "http://127.0.0.1:8000";
+
+        const getOrders = async () => {
+            const response = await axios.get(SERVER + "/orders");
+            orderDisplay.innerHTML = response.data.map(order => `
+        <div id="order-${order.id}">
+            ${order.desc}, Price: ${order.price}, User: ${order.user}
+            <button onclick="editOrder(${order.id})">Edit</button>
+            <button onclick="deleteOrder(${order.id})">Delete</button>
+        </div>
+    `).join("");
+        }
+
+        const addOrder = async () => {
+            const desc = document.getElementById('orderDesc').value;
+            const price = document.getElementById('price').value;
+
+            const orderData = {
+                desc: desc,
+                price: price,
+                user: localStorage.getItem("user_id")
+            };
+
+            await axios.post(SERVER + "/addorder", orderData);
+            getOrders();
+        }
+        getOrders();
+        // const editOrder = async (orderId) => {
+        //     const newDesc = prompt("Enter new description:");
+        //     const newPrice = prompt("Enter new price:");
+
+        //     const orderData = {
+        //         desc: newDesc,
+        //         price: newPrice
+        //     };
+
+        //     await axios.put(SERVER + `/orders/update/${orderId}/`, orderData);
+        //     getOrders();
+        // }
+
+        // const deleteOrder = async (orderId) => {
+        //     await axios.delete(SERVER + `/orders/delete/${orderId}/`);
+        //     getOrders();
+        // }
+
+        // Call getOrders on page load
+        window.onload = getOrders;
+
+    </script>
+</body>
+
+</html>

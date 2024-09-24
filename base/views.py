@@ -7,8 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
-from base.models import Student
-from base.serializers import StudentSerializer
+from base.models import Order, Student
+from base.serializers import OrderSerializer, StudentSerializer
 
 @api_view(['GET'])
 def index(req):
@@ -63,7 +63,26 @@ def getStudents(request):
 
 @api_view(['POST'])
 def create_student(request):
+    print(request.data)
     serializer = StudentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# CRUD Orders
+@api_view(['GET'])
+def getOrders(request):
+    all_orders = OrderSerializer(Order.objects.all(), many=True).data
+    return Response(all_orders)
+
+
+@api_view(['POST'])
+def create_order(request):
+    print(request.data)
+    serializer = OrderSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -84,7 +84,7 @@
             axios.post(SERVER, {
                 "username": username.value,
                 "password": password.value
-            }).then(res => msg.innerHTML=             parseJwt(res.data.access).username)
+            }).then(res => localStorage.setItem("user_id", parseJwt(res.data.access).user_id))
         }
         function parseJwt(token) {
             // Split the token into its parts
@@ -97,6 +97,7 @@
             return JSON.parse(jsonPayload);
         }
     </script>
+    <a href="orders.html">Shopping</a>
 </body>
 
 </html>

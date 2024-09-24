@@ -13,6 +13,9 @@ urlpatterns = [
     path('login', views.MyTokenObtainPairView.as_view()),
     path('students', views.getStudents),
     path('add', views.create_student),
+    path('addorder', views.create_order),
+    path('orders', views.getOrders),
+
     # path('upload_image/',views.APIViews.as_view()),
 
 ]

@@ -39,7 +39,7 @@
 
             const formData = new FormData();
             formData.append('sName', name);
-            formData.append('age', age);
+            formData.append('agee', age);
             if (image) formData.append('image', image);
 
             await axios.post(SERVER + "/add", formData, {
