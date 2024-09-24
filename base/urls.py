@@ -11,6 +11,9 @@ urlpatterns = [
     path('pub', views.test_pub), # public test
     path('register', views.register),
     path('login', views.MyTokenObtainPairView.as_view()),
+    path('students', views.getStudents),
+    # path('upload_image/',views.APIViews.as_view()),
+
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

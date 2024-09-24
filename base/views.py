@@ -7,6 +7,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from base.models import Student
+
 @api_view(['GET'])
 def index(req):
     return Response('hello')
@@ -54,3 +56,19 @@ def test_pub(req):
 def test_pri(req):
     print(req.user)
     return Response('test private zone')
+
+
+@api_view(['GET'])
+def getStudents(request):
+    res=[] #create an empty list
+    for img in Student.objects.all(): #run on every row in the table...
+        res.append({
+                "sName":img.sName,
+               "image":str( img.image)
+                }) #append row by to row to res list
+    return Response(res) #return array as json response
+
+#   image = models.ImageField(null=True,blank=True,default='/placeholder.png')
+#     id = models.BigAutoField(primary_key=True)
+#     sName = models.CharField(max_length=20)
+#     age = models.FloatField()

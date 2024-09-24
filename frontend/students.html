@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.6.7/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="display"></div>
+    <script>
+        const SERVER ="http://127.0.0.1:8000"
+        let students =[]
+        const getStudents =async () => {
+            students=await axios(SERVER +"/students")
+            display.innerHTML =students.data.map(student => `<div>
+                ${student.sName},
+                <img src= "${SERVER}/images/${student.image}" width=100px alt='aaaaaaa'>
+                </div>`).join("")
+        }
+        getStudents()
+    </script>
+</body>
+</html>
