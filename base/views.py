@@ -6,8 +6,9 @@ from rest_framework.decorators import api_view , permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from rest_framework import status
 from base.models import Student
+from base.serializers import StudentSerializer
 
 @api_view(['GET'])
 def index(req):
@@ -26,7 +27,6 @@ def register(request):
     user.save()
     return Response("new user born")
 
-
 # login
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -38,9 +38,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['emaillll'] = user.email
         # ...
         return token
-
-
-
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
@@ -57,18 +54,17 @@ def test_pri(req):
     print(req.user)
     return Response('test private zone')
 
-
+# CRUD students
 @api_view(['GET'])
 def getStudents(request):
-    res=[] #create an empty list
-    for img in Student.objects.all(): #run on every row in the table...
-        res.append({
-                "sName":img.sName,
-               "image":str( img.image)
-                }) #append row by to row to res list
-    return Response(res) #return array as json response
+    all_students = StudentSerializer(Student.objects.all(), many=True).data
+    return Response(all_students)
 
-#   image = models.ImageField(null=True,blank=True,default='/placeholder.png')
-#     id = models.BigAutoField(primary_key=True)
-#     sName = models.CharField(max_length=20)
-#     age = models.FloatField()
+
+@api_view(['POST'])
+def create_student(request):
+    serializer = StudentSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -12,6 +12,7 @@ urlpatterns = [
     path('register', views.register),
     path('login', views.MyTokenObtainPairView.as_view()),
     path('students', views.getStudents),
+    path('add', views.create_student),
     # path('upload_image/',views.APIViews.as_view()),
 
 ]
